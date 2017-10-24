@@ -1,4 +1,4 @@
 ---
 # tasks file for saleor
 
-- include: 01.yml
+- import_tasks: 01.yml

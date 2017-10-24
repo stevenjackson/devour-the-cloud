@@ -1,2 +1,2 @@
 # playbooks
-- include: saleor.yml
+- import_playbook: saleor.yml
