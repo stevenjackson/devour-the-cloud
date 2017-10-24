@@ -1,0 +1,129 @@
+---
+# clone the saleor repo locally
+
+# make sure git is installed
+- name: install git
+  apt:
+    name: git
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+
+
+# clone saleor repo
+- name: clone saleor repo
+  become: no
+  git:
+    repo: "{{ saleor_git_repo_url }}"
+    dest: "{{ saleor_directory }}"
+    version: "{{ saleor_git_version }}"
+    accept_hostkey: yes
+
+
+# install saleor dependenices
+
+- name: install python pip
+  become: True
+  apt:
+    name: python-pip
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+
+- name: install python wheel package
+  become: True
+  pip:
+    name: wheel
+
+- name: see if nodejs already installed
+  stat: path={{ path_to_nodejs }}
+  register: nodejs_binary
+
+- name: install nodejs 6 PPA
+  become: True
+  when: not nodejs_binary.stat.exists
+  shell: |
+    curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+
+- name: install nodejs 
+  become: True
+  when: not nodejs_binary.stat.exists
+  apt:
+    name: nodejs
+    update_cache: yes
+  
+- name: install NodeJS webpack
+  become: True
+  npm:
+    name: webpack
+    global: yes
+
+- name: install NodeJS yarn
+  become: True
+  npm:
+    name: yarn
+    version: 1.0.2
+    global: yes
+
+- name: install saleor Python requirements
+  become: True
+  pip:
+    requirements: "{{ saleor_directory }}/requirements.txt"
+
+- name: install libfontconfig (required by phantomjs)
+  become: True
+  apt:
+    name: libfontconfig
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+
+# install PostgreSQL and set up saleor database
+
+- name: install postgres and related packages
+  become: True
+  apt:
+    name: "{{ item }}"
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+  with_items:
+    - libpq-dev
+    - postgresql
+    - postgresql-contrib
+
+- name: create postgresql database for our Django project
+  become: True
+  become_user: postgres
+  postgresql_db:
+    name: "{{ saleor_db_name }}"
+    encoding: UTF-8
+
+- name: create postgresql user for our Django project
+  become: True
+  become_user: postgres
+  postgresql_user:
+    db: "{{ saleor_db_name }}"
+    name: "{{ saleor_db_user }}"
+    password: "{{ saleor_db_password }}"
+    role_attr_flags: SUPERUSER # note must be a super user to create "hstore" extension later when database is set up by Django migrate
+
+- name: grant privileges to our database user to the new database
+  become: True
+  become_user: postgres
+  postgresql_privs:
+    db: "{{ saleor_db_name }}"
+    privs: ALL
+    roles: "{{ saleor_db_user }}"
+    type: database
+    grant_option: yes
+
+- name: run Django migrations
+  django_manage:
+    command: migrate
+    app_path: "{{ saleor_directory }}"
+  environment:
+    SECRET_KEY: "{{ django_secret_key }}"
+
+- name: install front-end dependencies
+  command: yarn install
+  args:
+    chdir: "{{ saleor_directory }}"
+
+- name: yarn build-assets
+  shell: yarn run build-assets
+  tags: yarn
+  args:
+    chdir: "{{ saleor_directory }}"
