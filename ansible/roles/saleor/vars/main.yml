@@ -1,0 +1,5 @@
+---
+# vars file for saleor
+
+cache_update_valid_secs: 900
+
