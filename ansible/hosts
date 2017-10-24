@@ -1,0 +1,6 @@
+
+saleor_instance ansible_ssh_host=ec2-54-88-193-164.compute-1.amazonaws.com ansible_user=ubuntu
+
+[saleors]
+saleor_instance
+
