@@ -1,0 +1,6 @@
+
+saleor_instance ansible_ssh_host=<REPLACE WITH YOUR EC2 DNS> ansible_user=ubuntu
+
+[saleors]
+saleor_instance
+
