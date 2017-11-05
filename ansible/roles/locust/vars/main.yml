@@ -1,0 +1,10 @@
+---
+# vars file for locust
+
+# allow apt to cache updates so we don't update more than we need
+cache_update_valid_secs: 900
+
+# loadtest git repo
+loadtest_git_repo_url: git@github.com:stevenjackson/devour-the-cloud.git
+loadtest_git_version: master
+loadtest_directory: /home/ubuntu/loadtest

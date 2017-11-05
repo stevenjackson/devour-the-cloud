@@ -1,2 +1,3 @@
 # playbooks
 - import_playbook: saleor.yml
+- import_playbook: locust.yml

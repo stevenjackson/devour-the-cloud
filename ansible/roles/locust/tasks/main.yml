@@ -1,0 +1,26 @@
+---
+- name: install git
+  become: True
+  apt:
+    name: git
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+
+
+- name: clone loadtest repo
+  become: no
+  git:
+    repo: "{{ loadtest_git_repo_url }}"
+    dest: "{{ loadtest_directory }}"
+    version: "{{ loadtest_git_version }}"
+    accept_hostkey: yes
+
+- name: install python pip
+  become: True
+  apt:
+    name: python3-pip
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+
+- name: install loadtest Python requirements
+  become: True
+  pip:
+    requirements: "{{ loadtest_directory }}/requirements.txt"
