@@ -12,15 +12,18 @@
     * Make sure Security Group In-Bound Rules Allow Port 8000 for Django Test
     * ``t2.small`` recommended
 
+1. Spin up an Ubuntu 16.04 LTS EC2 Instance for Locust
+
+    * Make sure Security Group In-Bound Rules Allow Port 8089 for locust
+    * ``t2.small`` recommended
+
 2. Copy the file _inventory.ini.template_ to _inventory.ini_
 
 3. Modify _inventory.ini_ where to include the EC2 Instance Hostname
 
     ```ini
-    saleor_instance ansible_ssh_host=<REPLACE WITH YOUR EC2 DNS> ansible_user=ubuntu
-
-    [saleors]
-    saleor_instance
+    saleor_instance ansible_ssh_host=<REPLACE WITH saleor EC2 DNS> ansible_user=ubuntu
+    locust_instance ansible_ssh_host=<REPLACE WITH locust EC2 DNS> ansible_user=ubuntu
     ```
 
 4. Update your _~/.ssh/config_ to include a configuration entry for your EC2 Instance, something like:
@@ -43,7 +46,7 @@
     ```bash
     cd saleor
     export ALLOWED_HOSTS="<REPLACE WITH YOUR EC2 DNS>"
-    python manage.py runserver <REPLACE WITH YOUR EC2 DNS>:8000
+    ./manage.py runserver <REPLACE WITH YOUR EC2 DNS>:8000
     ```
 
     point your browser at ``http://<REPLACE WITH YOUR EC2 DNS>:8000`` and you should get

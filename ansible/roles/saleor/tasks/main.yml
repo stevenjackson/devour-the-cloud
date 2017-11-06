@@ -1,5 +1,4 @@
 ---
 # tasks file for saleor
 
-- import_tasks: python2.7.yml
 - import_tasks: install_saleor.yml

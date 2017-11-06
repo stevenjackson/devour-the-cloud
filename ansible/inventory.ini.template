@@ -1,6 +1,14 @@
 
 saleor_instance ansible_ssh_host=<REPLACE WITH YOUR EC2 DNS> ansible_user=ubuntu
 
+locust_instance ansible_ssh_host=<REPLACE WITH LOCUST EC2 DNS> ansible_user=ubuntu
+
+# use python 3
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+
 [saleors]
 saleor_instance
 
+[locusts]
+locust_instance

@@ -3,6 +3,7 @@
 
 # make sure git is installed
 - name: install git
+  become: True
   apt:
     name: git
     cache_valid_time: "{{ cache_update_valid_secs }}"
@@ -23,7 +24,7 @@
 - name: install python pip
   become: True
   apt:
-    name: python-pip
+    name: python3-pip
     cache_valid_time: "{{ cache_update_valid_secs }}"
 
 - name: install python wheel package
@@ -41,13 +42,13 @@
   shell: |
     curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 
-- name: install nodejs 
+- name: install nodejs
   become: True
   when: not nodejs_binary.stat.exists
   apt:
     name: nodejs
     update_cache: yes
-  
+
 - name: install NodeJS webpack
   become: True
   npm:
