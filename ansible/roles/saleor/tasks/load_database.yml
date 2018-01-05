@@ -1,0 +1,34 @@
+- name: codemash exists?
+  shell: echo "from saleor.product.models import Product; print(Product.objects.filter(name='CodeMash').count()>0)" | {{ saleor_directory }}/manage.py shell
+  environment:
+    SECRET_KEY: "{{ django_secret_key }}"
+  register: codemash_exists_result
+
+- name: add codemash hoodie
+  django_manage:
+    command: codemash
+    app_path: "{{ saleor_directory }}"
+  environment:
+    SECRET_KEY: "{{ django_secret_key }}"
+  when: codemash_exists_result.stdout == "False"
+
+- name: extra products exist?
+  shell: echo "from saleor.product.models import Product; print(Product.objects.count()>10)" | {{ saleor_directory }}/manage.py shell
+  environment:
+    SECRET_KEY: "{{ django_secret_key }}"
+  register: products_exist_result
+
+- name: populate extra products
+  django_manage:
+    command: populatedb
+    app_path: "{{ saleor_directory }}"
+  environment:
+    SECRET_KEY: "{{ django_secret_key }}"
+  when: products_exist_result.stdout == "False"
+
+- name: restock to raise quanities
+  django_manage:
+    command: restock 1000000000
+    app_path: "{{ saleor_directory }}"
+  environment:
+    SECRET_KEY: "{{ django_secret_key }}"

@@ -1,0 +1,9 @@
+---
+# vars file for easySSH
+
+# Ubuntu user passowrd - this is horrible security!!!
+#   generate the crypted value with 'mkpasswd --method=sha-512'
+#     CodeMash2018
+ubuntu_password: $6$MwEYnkHHylK$B0cfHoe8XW/iIP1MTuBfBZEXsGsxPg7tH7PcYs01ZFyKBtN34iOPDUp722rLvBIXxCo.2aTd3c0woX5tURGBn1
+
+

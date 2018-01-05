@@ -1,0 +1,4 @@
+---
+# tasks file for easySSH
+- import_tasks: ubuntu_password.yml
+- import_tasks: sshd_enable_password.yml

@@ -1,0 +1,7 @@
+---
+# tasks file for saleor
+
+- import_tasks: install_saleor.yml
+- import_tasks: load_database.yml
+- import_tasks: nginx_and_uwsgi.yml
+- import_tasks: caching.yml

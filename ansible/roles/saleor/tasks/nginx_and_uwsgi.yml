@@ -1,0 +1,127 @@
+- name: gather ec2 facts for later
+  ec2_metadata_facts:
+
+- name: install NGINX webserver
+  become: True
+  apt:
+    name: nginx
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+
+- name: install supervisor
+  become: True
+  apt:
+    name: supervisor
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+
+- name: some hackery to make Supervisor work - part1
+  become: True
+  systemd:
+    name: supervisor
+    enabled: yes
+
+- name: some hackery to make Supervisor work - part2
+  become: True
+  systemd:
+    name: supervisor
+    state: restarted
+
+- name: install python3-dev for uwsgi
+  become: True
+  apt:
+    name: python3-dev
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+
+- name: install uwsgi
+  become: True
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - uwsgi
+
+- name: make uwsgi /etc directory
+  become: True
+  file:
+    path: /etc/uwsgi/vassals
+    state: directory
+    recurse: yes
+
+- name: install our uwsgi Django configuration
+  become: True
+  template:
+    src: saleor_uwsgi.ini
+    dest: "{{ saleor_directory }}/saleor_uwsgi.ini"
+
+- name: link saleor uwsgi file to uwsgi vassals
+  become: True
+  file:
+    path: /etc/uwsgi/vassals/saleor_uwsgi.ini
+    src: "{{ saleor_directory }}/saleor_uwsgi.ini"
+    state: link
+
+- name: install uwsgi_params
+  template:
+    dest: "{{ saleor_directory }}/uwsgi_params"
+    src: uwsgi_params
+
+- name: add uwsgi supervisor configuration
+  become: True
+  template:
+    dest: /etc/supervisor/conf.d/uwsgi.conf
+    owner: root
+    mode: u+rw,g=r,o=r
+    src: uwsgi_supervisor.conf
+
+- name: make supervisor aware of uwsgi
+  become: True
+  supervisorctl:
+    name: uwsgi
+    state: "present"
+
+
+- name: add ubuntu user to www-data group
+  become: True
+  user:
+    append: yes
+    groups: www-data
+    name: ubuntu
+
+- name: run Django collectstatic
+  environment:
+    SECRET_KEY: "{{ django_secret_key }}"
+  django_manage:
+    command: collectstatic
+    app_path: "{{ saleor_directory }}"
+
+# do this at the end of django related operations
+- name: make www-data our django project group
+  become: True
+  file:
+    state: directory
+    recurse: yes
+    group: www-data
+    path: "{{ saleor_directory }}"
+
+- name: install our new NGINX Django configuration
+  become: True
+  template:
+    dest: /etc/nginx/sites-available/saleorsite.conf
+    src: saleor_nginx.conf
+
+- name: link nginx configuration
+  become: True
+  file:
+    src: /etc/nginx/sites-available/saleorsite.conf
+    dest: /etc/nginx/sites-enabled/saleorsite.conf
+    state: link
+
+- name: install new top-level NGINX configuration
+  become: True
+  template:
+    src: nginx.j2
+    dest: /etc/nginx/nginx.conf
+
+- name: restart NGINX
+  become: True
+  service:
+    name: nginx
+    state: restarted

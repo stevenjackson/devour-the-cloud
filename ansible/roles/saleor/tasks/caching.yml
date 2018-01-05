@@ -1,0 +1,29 @@
+- name: install memcached
+  become: True
+  apt:
+    name: "{{ item }}" 
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+  with_items:
+    - memcached
+    - libmemcached-dev
+
+- name: install pylibmc
+  become: True
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - pylibmc
+
+- name: update saleor uwsgi environment with caching
+  become: True
+  template:
+    src: saleor_uwsgi_with_caching.ini
+    dest: "{{ saleor_directory }}/saleor_uwsgi.ini"
+
+- name: restart uwsgi
+  become: True
+  supervisorctl:
+    name: uwsgi
+    state: "restarted"
+
+

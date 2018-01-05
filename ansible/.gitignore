@@ -1,0 +1,6 @@
+# Ansible error retry file
+*.retry
+
+# don't check inventory.ini into repo
+inventory.ini
+

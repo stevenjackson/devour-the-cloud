@@ -1,0 +1,5 @@
+# our locust setup
+- hosts: locusts
+  roles:
+    - locust
+    - easySSH

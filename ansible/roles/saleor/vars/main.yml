@@ -1,0 +1,21 @@
+---
+# vars file for saleor role
+
+# allow apt to cache updates so we don't update more than we need
+cache_update_valid_secs: 900
+
+# saleor git repo
+saleor_git_repo_url: https://github.com/stevenjackson/saleor.git
+saleor_git_version: master
+saleor_directory: /home/ubuntu/saleor
+
+# saleor dependency variables
+path_to_nodejs: /usr/bin/nodejs
+
+# saleor database variables
+saleor_db_name: saleor
+saleor_db_user: saleor
+saleor_db_password: saleor
+
+# saleor Django variables
+django_secret_key: something # yeah, this is a security issue, but this is fine for load testing
