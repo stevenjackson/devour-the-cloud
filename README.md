@@ -20,3 +20,5 @@ System Under Test: https://github.com/stevenjackson/saleor
 [Signup](signup.md)
 
 [Buy](buy.md)
+
+[User Funnel](user_funnel.md)
