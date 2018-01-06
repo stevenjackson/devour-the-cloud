@@ -13,7 +13,13 @@ class Helpers:
 class VisitorBehavior(TaskSet, Helpers):
     @task
     def register_user(self):
-        pass
+        response = self.client.get("/account/signup/")
+        csrf_token = self.parse_csrf(response.text)
+        response = self.client.post("/account/signup/", {
+            "csrfmiddlewaretoken":csrf_token,
+            "email":fake.email(),
+            "password":fake.password()
+        })
 
 class Visitor(HttpLocust):
     task_set = VisitorBehavior
