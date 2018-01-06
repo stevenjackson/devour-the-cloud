@@ -26,7 +26,41 @@ class Helpers:
 class VisitorBehavior(TaskSet, Helpers):
     @task
     def buy(self):
-        pass
+        self.client.get("/")
+        self.client.get("/products/category/apparel-1/")
+        self.client.get("/products/codemash-1/")
+        self.post_ajax("/products/codemash-1/add/", {"quantity":1, "variant":1 })
+        response = self.client.get("/checkout/")
+        csrf_token = self.parse_csrf(response.text)
+        response = self.client.post("/checkout/shipping-address/", {
+            "csrfmiddlewaretoken":csrf_token,
+            "email":fake.email(),
+            "phone":"1234567890",
+            "first_name": fake.first_name(),
+            "last_name": fake.last_name(),
+            "company_name": fake.company(),
+            "street_address_1": fake.street_address(),
+            "street_address_2": "",
+            "city": "The Land",
+            "country_area": "OH",
+            "postal_code": "44111",
+            "country": "US",
+        })
+        csrf_token = self.parse_csrf(response.text)
+        response = self.client.post("/checkout/shipping-method/", {
+            "csrfmiddlewaretoken":csrf_token,
+            "method": "1"
+        })
+        csrf_token = self.parse_csrf(response.text)
+        response = self.client.post("/checkout/summary/", {
+            "csrfmiddlewaretoken":csrf_token,
+            "address": "shipping_address"
+        })
+        csrf_token = self.parse_csrf(response.text)
+        response = self.client.post(response.url, {
+            "csrfmiddlewaretoken":csrf_token,
+            "method": "default"
+    }, name="/order/[order-id]/payment")
 
 class Visitor(HttpLocust):
     task_set = VisitorBehavior
