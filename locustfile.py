@@ -104,20 +104,20 @@ class SharedTasks(Helpers):
         }, name="9 /order/[order-id]/payment")
 
 class VisitorBehavior(TaskSet, SharedTasks):
-    @task
+    @task(3)
     def just_visiting(self):
         self.client.get("/")
 
-    @task
+    @task(47)
     def search(self):
         self.find_hoodie()
 
-    @task
+    @task(25)
     def bail_on_cart(self):
         self.find_hoodie()
         self.add_to_cart()
 
-    @task
+    @task(25)
     def buy(self):
         self.find_hoodie()
         self.add_to_cart()
@@ -127,28 +127,30 @@ class ReturningUserBehavior(TaskSet, SharedTasks):
     def on_start(self):
         self.register_user()
 
-    @task
+    @task(20)
     def search(self):
         self.find_hoodie()
 
-    @task
+    @task(5)
     def bail_on_cart(self):
         self.find_hoodie()
         self.add_to_cart()
 
-    @task
+    @task(75)
     def buy(self):
         self.find_hoodie()
         self.add_to_cart()
         self.checkout()
 
 class Visitor(HttpLocust):
+    weight = 80
     task_set = VisitorBehavior
     host = HOST
     min_wait = MIN_WAIT
     max_wait = MAX_WAIT
 
 class ReturningUser(HttpLocust):
+    weight = 20
     task_set = ReturningUserBehavior
     host = HOST
     min_wait = MIN_WAIT
