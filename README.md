@@ -22,3 +22,12 @@ System Under Test: https://github.com/stevenjackson/saleor
 [Buy](buy.md)
 
 [User Funnel](user_funnel.md)
+
+## Advanced
+[Load Balancer](advanced/elb.md)
+
+[Vertical Scaling](advanced/vertical_scaling.md)
+
+[RDS](advanced/rds.md)
+
+[Scaling Locust](advanced/scaling_locust.md)
