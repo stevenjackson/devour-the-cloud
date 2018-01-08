@@ -1,0 +1,26 @@
+- name: install pgbouncer
+  become: True
+  apt:
+    name: "{{ item }}" 
+    cache_valid_time: "{{ cache_update_valid_secs }}"
+  with_items:
+    - pgbouncer
+
+- name: configure pgbouncer with our Saleor db connection info
+  become: True
+  template:
+    src: pgbouncer.ini
+    dest: /etc/pgbouncer/pgbouncer.ini
+
+- name: set up pgbouncer user database
+  become: True
+  template:
+    src: pgbouncer_userlist.txt
+    dest: /etc/pgbouncer/userlist.txt
+
+- name: restart pgbouncer
+  become: True
+  systemd:
+    name: pgbouncer
+    state: restarted
+

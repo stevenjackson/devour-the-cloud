@@ -1,0 +1,1 @@
+"{{ saleor_db_user }}" "{{ saleor_db_password }}"

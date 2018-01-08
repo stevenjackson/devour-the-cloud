@@ -5,3 +5,4 @@
 - import_tasks: load_database.yml
 - import_tasks: nginx_and_uwsgi.yml
 - import_tasks: caching.yml
+- import_tasks: install_pgbouncer.yml
