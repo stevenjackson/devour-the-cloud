@@ -23,6 +23,8 @@ System Under Test: https://github.com/stevenjackson/saleor
 
 [User Funnel](user_funnel.md)
 
+[View Caching](view_caching.md)
+
 ## Advanced
 [Load Balancer](advanced/elb.md)
 
