@@ -66,17 +66,24 @@ We recommend you go to [https://console.aws.amazon.com/billing/](https://console
 
 ## Log into Locust EC2 Remotely with SSH
 
+**WARNING!!!! THIS IS HORRIBLY INSECURE!!!!**
+
+To make it easier for participants who are not familiar with SSH, PKI, etc. we have enabled password-based login for the **Saleor** and **Locust** EC2 Instances.  This is horribly insecure.  Do not do this, ever.  You have been warned.
+
+If you know how to use Keys with SSH, feel free to do so for the workshop.
+
+
 1. Open EC2 Dashboard at [https://console.aws.amazon.com/ec2/](https://console.aws.amazon.com/ec2/). Click on **Instances**.
 <br/>![](screenshots/5_instance.png)
-2. Select your newly created instance and click **Connect**. (If your instance doesn't appear, you may be in the wrong region. Try the other US regions in the upper-right drop-down.)
-<br/>![](screenshots/6_connect.png)
-3. Follow the provided instructions for connecting to your instance via SSH. In an OSX or Linux system, you can run:
+2. Copy the Public DNS Hostname of the instance, and initiate an SSH connection.Use **ubuntu** as the username.  On Mac OS X and Linux you can use the following from a terminal:
 
     ```
-    host$ ssh -i "<path to private key>" <ec2_user>@<ec2_public_ip>
+    host$ ssh ubuntu@<ec2_public_dns>
     ```
 
-    > Note: The "ec2_user" for Ubuntu Server on AWS is ```ubuntu```.
-4. You should have a login
+    > Use **CodeMash2018** when prompted for the password.
+3. Since this is the first time you are connecting to this server you will likely be prompted about the server's key fingerprint.  Respond **yes**.
+4. You should have a login (depending on your SSH client and terminal settings, your screen may look much different)
+<br/>![](screenshots/ssh_login.png)
 
 
