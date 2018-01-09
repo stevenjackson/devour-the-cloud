@@ -67,7 +67,7 @@ Modify saleor to cache our slowest static views so they can be re-used between u
 
 1. First we'll fix the Apparel page.  We'll tell django to cache this page for 15 seconds.
 
-    1. Edit `saleor/products/url.py`
+    1. Edit `saleor/product/urls.py`
 
     1. Insert into line 2:
 
