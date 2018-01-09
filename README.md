@@ -33,3 +33,7 @@ System Under Test: https://github.com/stevenjackson/saleor
 [RDS](advanced/rds.md)
 
 [Scaling Locust](advanced/scaling_locust.md)
+
+[Database Connection Pooling with PgBouncer](advanced/pgbouncer.md)
+
+[Django Debug Toolbar](advanced/django_debug_toolbar.md)
