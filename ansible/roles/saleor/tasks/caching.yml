@@ -14,6 +14,12 @@
   with_items:
     - pylibmc
 
+- name: update saleor uwsgi environment with caching
+  become: True
+  template:
+    src: saleor_uwsgi_with_caching.ini
+    dest: "{{ saleor_directory }}/saleor_uwsgi.ini"
+
 - name: restart uwsgi
   become: True
   supervisorctl:
