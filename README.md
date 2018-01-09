@@ -15,6 +15,7 @@ System Under Test: https://github.com/stevenjackson/saleor
 
 [Setting up your Environment](getting_started_with_aws.md)
 
+[Slides](https://speakerdeck.com/stevenjackson/devour-the-cloud-with-locust-swarms-hands-on-load-testing)
 
 ## Exercises
 [Signup](signup.md)
