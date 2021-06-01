@@ -17,5 +17,5 @@ pyzmq==16.0.2
 requests==2.18.4
 six==1.11.0
 text-unidecode==1.1
-urllib3==1.22
+urllib3==1.26.5
 Werkzeug==0.15.3
